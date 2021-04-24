@@ -16,13 +16,14 @@ def handle_client(connection, address):
     connected = True
     while connected:
         message_length = connection.recv(HEADER).decode("utf-8")
-        message_length = int(message_length)
-        message = connection.recv(message_length).decode("utf-8")
-        
-        if message == disconnect_alert_message:
-            connected = False
-        
-        print(f"{address} - {message}")
+        if message_length:
+            message_length = int(message_length)
+            message = connection.recv(message_length).decode("utf-8")
+            
+            if message == disconnect_alert_message:
+                connected = False
+            
+            print(f"{address} - {message}")
     connection.close()
 
 def start():
