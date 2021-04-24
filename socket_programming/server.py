@@ -24,6 +24,7 @@ def handle_client(connection, address):
                 connected = False
             
             print(f"{address} - {message}")
+            connection.send("Message Received".encode("utf-8"))
     connection.close()
 
 def start():

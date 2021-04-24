@@ -16,6 +16,7 @@ def send_message(the_message):
     send_length += b" " * (HEADER - len(send_length))
     client.send(send_length)
     client.send(message)
+    print(client.recv(2048).decode("utf-8"))
     
 send_message("Hello Gift")
 input()
