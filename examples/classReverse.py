@@ -11,4 +11,4 @@ class palindromes:
 word1 = palindromes("next")
 
 word1.printText()
-word1.
+word1.reverse()
