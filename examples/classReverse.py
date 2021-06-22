@@ -3,12 +3,16 @@ class palindromes:
         self.word = word
         
     def printText(self):
-        print(self.word)
+        return self.word
         
     def reverse(self):
-        print(self.word[::-1])
-        
-word1 = palindromes("next")
+        return self.word[::-1]
 
-word1.printText()
-word1.reverse()
+  
+word1 = palindromes(input("Enter the word: "))
+
+#prints the word
+print(word1.printText())
+
+#prints the word in reverse
+print(word1.reverse())
