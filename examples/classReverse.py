@@ -1,10 +1,12 @@
+#created class named palindromes
 class palindromes:
     def __init__(self, word):
         self.word = word
         
     def printText(self):
         return self.word
-        
+    
+    #method for returning the reverse of the word
     def reverse(self):
         return self.word[::-1]
 
