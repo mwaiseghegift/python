@@ -17,4 +17,4 @@ word1 = palindromes(input("Enter the word: "))
 print(word1.printText())
 
 #prints the word in reverse
-print(word1.reverse())
+print(word1.reverse())fooba
