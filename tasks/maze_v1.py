@@ -89,30 +89,24 @@ class MazeMDP(object):
         return self.start_loc
             
 
-    def step(self, state, action):
-        #print(state)
+    def step(self, action):
         #print(action)
-        x,y,term = state
         if action == 0:
-            x,y = x,y-1
-        elif action == 1:
-            x,y = x,y+1
-        elif action == 2:
-            x,y = x-1,y
-        elif action == 3:
-            x,y = x+1,y
-        else:
-            raise ValueError('Invalid action')
-        if self.maze[x][y] == True:
-            x,y = state
-        next_state = np.array([x,y,term])
-        if self.maze[x][y] == True:
-            next_state[2] = 1
-        return next_state, -1, next_state[2] == 1
+            self.start_loc[0] -= 1
+        if action == 1:
+            self.start_loc[0] += 1
+        if action == 2:
+            self.start_loc[1] -= 1
+        if action == 3:
+            self.start_loc[1] += 1
+        return self.start_loc
             
 
     def goal_Reached(self, state):
         return state[2] == 1
+
+    def action_space(self):
+        return [0,1,2,3]
 
 
     # Function to plot the maze and path
@@ -120,3 +114,6 @@ class MazeMDP(object):
         plt.imshow(self.maze, cmap=plt.cm.binary,interpolation='nearest')
         plt.scatter(path[:,1], path[:,0], s=7, c='g')
         plt.show()
+
+
+# 
