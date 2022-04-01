@@ -1,89 +1,135 @@
-"""  
-Neural Network: Implement approximated TD learning algorithm of your choice (Q-learning or
-SARSA) using neural networks from the keras package and apply this algorithm to solve the
-environments. Compute the models 𝑄(𝑠, 𝑎, 𝑤 𝑄 ) & 𝜋(𝑠, 𝑤 𝜋 )
-
-"""
-
-from keras.models import Sequential
-from keras.layers import Dense, Actication, Flatten
-from tensorflow.keras.optimizers import Adam
-import numpy as np
 import gym
+import random
+from keras import Sequential
+from collections import deque
+from keras.layers import Dense
+from tensorflow.keras.optimizers import Adam
 import matplotlib.pyplot as plt
+from keras.activations import relu, linear
 
-# Initialize the environment
+import numpy as np
 env = gym.make('MountainCar-v0')
+env.seed(110)
+np.random.seed(10)
 
-# Initialize the model
-model = Sequential()
-# Add the first layer
-model.add(Dense(24, input_dim=2, activation='relu'))
-# Add the second layer
-model.add(Dense(24, activation='relu'))
-# Add the third layer
-model.add(Dense(1, activation='linear'))
-# Compile the model
-model.compile(loss='mse', optimizer=Adam(lr=0.001))
 
-# Initialize the variables
-episodes = 1000
-max_steps = 200
-gamma = 0.99
-epsilon = 1.0
-epsilon_min = 0.01
-epsilon_decay = 0.995
+class DQN:
 
-# Initialize the lists
-rewards = []
-losses = []
+    """ Implementation of deep q learning algorithm """
 
-# Run the episodes
-for e in range(episodes):
-    # Initialize the variables
-    state = env.reset()
-    state = np.reshape(state, [1, 2])
-    total_reward = 0
-    loss = 0
-    done = False
-    # Run the episode
-    for step in range(max_steps):
-        # Render the environment
-        env.render()
-        # Choose an action
-        if np.random.random() < epsilon:
+    def __init__(self, action_space, state_space):
+
+        self.action_space = action_space
+        self.state_space = state_space
+        self.epsilon = 1.0
+        self.gamma = .95
+        self.batch_size = 64
+        self.epsilon_min = .01
+        self.lr = 0.001
+        self.epsilon_decay = .995
+        self.memory = deque(maxlen=100000)
+        self.model = self.build_model()
+
+    def build_model(self):
+
+        model = Sequential()
+        model.add(Dense(20, input_dim=self.state_space, activation=relu))
+        model.add(Dense(25, activation=relu))
+        model.add(Dense(self.action_space, activation=linear))
+        model.compile(loss='mse', optimizer=Adam(lr=self.lr))
+        return model
+
+    def remember(self, state, action, reward, next_state, done):
+        self.memory.append((state, action, reward, next_state, done))
+
+    def act(self, state):
+
+        if np.random.rand() <= self.epsilon:
+            return random.randrange(self.action_space)
+        act_values = self.model.predict(state)
+        return np.argmax(act_values[0])
+
+    def replay(self):
+
+        if len(self.memory) < self.batch_size:
+            return
+
+        minibatch = random.sample(self.memory, self.batch_size)
+        states = np.array([i[0] for i in minibatch])
+        actions = np.array([i[1] for i in minibatch])
+        rewards = np.array([i[2] for i in minibatch])
+        next_states = np.array([i[3] for i in minibatch])
+        dones = np.array([i[4] for i in minibatch])
+
+        states = np.squeeze(states)
+        next_states = np.squeeze(next_states)
+
+        targets = rewards + self.gamma*(np.amax(self.model.predict_on_batch(next_states), axis=1))*(1-dones)
+        targets_full = self.model.predict_on_batch(states)
+
+        ind = np.array([i for i in range(self.batch_size)])
+        targets_full[[ind], [actions]] = targets
+
+        self.model.fit(states, targets_full, epochs=1, verbose=0)
+        if self.epsilon > self.epsilon_min:
+            self.epsilon *= self.epsilon_decay
+
+
+def get_reward(state):
+
+    if state[0] >= 0.5:
+        print("Car has reached the goal")
+        return 10
+    if state[0] > -0.4:
+        return (1+state[0])**2
+    return 0
+
+
+def train_dqn(episode):
+
+    loss = []
+    agent = DQN(env.action_space.n, env.observation_space.shape[0])
+    for e in range(episode):
+        state = env.reset()
+        state = np.reshape(state, (1, 2))
+        score = 0
+        max_steps = 1000
+        for i in range(max_steps):
+            action = agent.act(state)
+            env.render()
+            next_state, reward, done, _ = env.step(action)
+            reward = get_reward(next_state)
+            score += reward
+            next_state = np.reshape(next_state, (1, 2))
+            agent.remember(state, action, reward, next_state, done)
+            state = next_state
+            agent.replay()
+            if done:
+                print("episode: {}/{}, score: {}".format(e, episode, score))
+                break
+        loss.append(score)
+    return loss
+
+
+def random_policy(episode, step):
+
+    for i_episode in range(episode):
+        env.reset()
+        for t in range(step):
+            env.render()
             action = env.action_space.sample()
-        else:
-            action = np.argmax(model.predict(state))
-        # Take the action
-        new_state, reward, done, info = env.step(action)
-        new_state = np.reshape(new_state, [1, 2])
-        # Update the variables
-        total_reward += reward
-        # Update the model
-        target = reward + gamma * np.amax(model.predict(new_state))
-        target_f = model.predict(state)
-        target_f[0][action] = target
-        # Train the model
-        loss += model.train_on_batch(state, target_f)
-        # Update the variables
-        state = new_state
-        # Check if the episode is done
-        if done:
-            break
-    # Update the variables
-    rewards.append(total_reward)
-    losses.append(loss)
-    # Update the epsilon
-    epsilon = max(epsilon_min, epsilon * epsilon_decay)
+            state, reward, done, info = env.step(action)
+            if done:
+                print("Episode finished after {} timesteps".format(t+1))
+                break
+            print("Starting next episode")
 
-    # Print the results
-    print('Episode: {}/{}'.format(e, episodes),
-            'Total reward: {}'.format(total_reward),
-            'Training loss: {:.4f}'.format(loss),
-            'Epsilon: {:.4f}'.format(epsilon))
-            
 
-# Plot the rewards
-plt.plot(rewards)
-plt.show()
+if __name__ == '__main__':
+
+    print(env.observation_space)
+    print(env.action_space)
+    episodes = 60
+    loss = train_dqn(episodes)
+    plt.plot([i+1 for i in range(episodes)], loss)
+    plt.show()

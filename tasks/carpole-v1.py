@@ -127,3 +127,5 @@ if __name__ == '__main__':
     loss = train_dqn(ep)
     plt.plot([i+1 for i in range(0, ep, 2)], loss[::2])
     plt.show()
+
+# compute 
