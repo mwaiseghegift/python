@@ -1,11 +1,3 @@
-#  A pole is attached by an un-actuated joint to a cart,
-#  which moves along a frictionless track. The system is controlled by applying a force of +1 or -1 to the cart.
-#  The pendulum starts upright, and the goal is to prevent it from falling over.
-#  A reward of +1 is provided for every timestep that the pole remains upright.
-#  The episode ends when the pole is more than 15 degrees from vertical,
-#  or the cart moves more than 2.4 units from the center.
-
-
 import gym
 import random
 from keras import Sequential
@@ -15,7 +7,7 @@ from tensorflow.keras.optimizers import Adam
 import matplotlib.pyplot as plt
 
 import numpy as np
-env = gym.make('CartPole-v0')
+env = gym.make('CartPole-v1')
 env.seed(0)
 np.random.seed(0)
 
@@ -127,5 +119,3 @@ if __name__ == '__main__':
     loss = train_dqn(ep)
     plt.plot([i+1 for i in range(0, ep, 2)], loss[::2])
     plt.show()
-
-# compute 

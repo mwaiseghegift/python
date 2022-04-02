@@ -1,5 +1,4 @@
 
-#Every state is a potential terminal state
 import math
 import numpy as np
 from numpy.random import random_integers as rnd
@@ -45,21 +44,6 @@ class MazeMDP(object):
         x,y = np.where(self.maze == False)
         non_term_vars = np.zeros_like(x)
         self.valid_points = np.squeeze(np.array([[x],[y],[non_term_vars]])).T
-
-        #self.show_path(self.valid_points)
-        #point = np.array([20,25])
-        #plt.imshow(self.maze, cmap=plt.cm.binary,interpolation='nearest')
-        #plt.scatter(point[1], point[0], s=7, c='g')
-        #plt.savefig('maze_point.png')
-        #self.maze[point[0],point[1]] = True
-        #self.maze[point[0]-1,point[1]] = True
-        #valid_point = self.get_valid_loc_near(point)
-        ##plt.imshow(self.maze, cmap=plt.cm.binary,interpolation='nearest')
-        #plt.scatter(valid_point[1], valid_point[0], s=7, c='b')
-        #plt.savefig('maze_point.png')
-        #self.goal_loc = self.maxRanges
-        ##plt.show()
-        
 
     def show_path(self, points, color = 'r', name = 'curr', stayAwake = False):
         plt.imshow(self.maze, cmap=plt.cm.binary,interpolation='nearest')
