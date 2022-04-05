@@ -15,7 +15,6 @@ def maxMoney(arr, n):
 
 n = int(input())
 
-# After this, there are n lines. Each such line has three integers ai, bi, and pi: the starting day, the ending day, and the reward.
 arr = []
 for i in range(n):
     arr.append(list(map(int, input().split())))

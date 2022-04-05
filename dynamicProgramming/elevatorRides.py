@@ -20,4 +20,3 @@ weight = list(map(int, input().split()))
 print(elevatorRides(n, weight, maxWeight))
 
 
-
