@@ -1,7 +1,3 @@
-# Consider an n×n grid whose squares may have traps. 
-
-# func to calculate the number of paths from the upper-left square to the lower-right square. You can only move right or down.
-# It is not allowed to move to a square with a trap.
 
 def gridPaths(n):
     # create a 2D array of size n x n

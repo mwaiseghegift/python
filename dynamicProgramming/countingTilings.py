@@ -1,4 +1,3 @@
-# solve the problem of counting the number of ways you can fill an n×m grid using 1×2 and 2×1 tiles using dynamic programming
 
 def countTilings(n, m):
     # create a 2D array of size n+1 x m+1

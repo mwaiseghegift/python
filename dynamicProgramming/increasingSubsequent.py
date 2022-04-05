@@ -1,12 +1,3 @@
-# solve the increasing subsequence problem using dynamic programming
-
-"""
-You are given an array containing n integers. 
-Your task is to determine the longest increasing subsequence in the array, i.e., 
-the longest subsequence where every element is larger than the previous one.
-A subsequence is a sequence that can be derived from the array by deleting some elements without 
-changing the order of the remaining elements.
-"""
 
 # Function to return the length of the longest increasing subsequence
 def increasingSubsequence(arr, n):

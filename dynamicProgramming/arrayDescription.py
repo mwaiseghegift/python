@@ -1,4 +1,3 @@
-# solve array description problem using dynamic programming
 
 #n and m: the array size and the upper bound for each value.
 n, m = map(int, input().split())

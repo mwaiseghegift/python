@@ -1,10 +1,3 @@
-# solve the projects attendance problem using dynamic programming
-
-"""
-There are n projects you can attend. For each project, 
-you know its starting and ending days and the amount of money you would get as reward. 
-You can only attend one project during a day
-"""
 
 # Function to return the maximum amount of money you can earn
 def maxMoney(arr, n):

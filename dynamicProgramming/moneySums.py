@@ -1,4 +1,3 @@
-# solving money sums problem using dynamic programming
 
 # function to find all money sums you can create using these coins
 def moneySums(coins, money):

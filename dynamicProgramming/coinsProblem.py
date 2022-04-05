@@ -28,3 +28,5 @@ if minCoins(coins, x) > x:
     print(-1)
 else:
     print(minCoins(coins, x))
+
+# time complexity: O(N*6)

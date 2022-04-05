@@ -1,6 +1,4 @@
-# calculate the number of distinct ways you can produce sum x using the available coins
 
-# first input line has two integers n and x: the number of coins and the desired sum of money.
 n, x = map(int, input().split())
 
 # second line has n distinct integers: the values of the coins.
@@ -19,4 +17,3 @@ def coinCombination(coins, x):
     return ways[x]
 
 print(coinCombination(coins, x))
-
