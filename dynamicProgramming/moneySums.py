@@ -24,3 +24,4 @@ for i in range(n):
         print(arr[i:j+1], sum(arr[i:j+1]))
 
 
+

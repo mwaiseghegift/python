@@ -11,7 +11,7 @@ def minCoins(coins, amount):
     for i in range(1, amount+1):
         # set the minimum number of coins to be the amount itself
         minCoins[i] = i
-        # for each coin, check if the coin can be used to make up the amount
+        # for each coin, check if the coin can be used to make up t# tim
         for coin in coins:
             # if the coin can be used to make up the amount, check if the minimum number of coins required to make up the amount is less than the minimum number of coins required to make up the amount using the coin
             if coin <= i:
@@ -28,5 +28,12 @@ if minCoins(coins, x) > x:
     print(-1)
 else:
     print(minCoins(coins, x))
+
+# time complexity: O(N*6)
+
+# Recurrence relation and DP formulation in topological order
+
+# Recurrence relation:
+# minCoins(i) = min(minCoins(i-c1), minCoins(i-c2), ..., minCoins(i-cn)) + 1
 
 # time complexity: O(N*6)
